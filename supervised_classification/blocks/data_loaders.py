@@ -4,7 +4,6 @@ from sklearn.model_selection import train_test_split
 from torchvision import transforms
 from torch.utils.data import DataLoader
 
-from supervised_classification.settings import settings
 from simple_converge.utils.constants import CIFAR10_MEAN, CIFAR10_STD
 from simple_converge.datasets.DataframeImageCategoricalDataset import DataframeImageCategoricalDataset
 
@@ -33,7 +32,7 @@ def validation_transform(image, label):
     return image, label
 
 
-def get_data_loaders():
+def get_data_loaders(settings):
 
     # Load data files
     train_data_file = pd.read_csv(settings['dataset']['train_data_file_path'])
@@ -49,7 +48,8 @@ def get_data_loaders():
         )
 
     # Get labels
-    settings['dataset']['labels'] = train_data_file[settings['dataset']['label_name_column']].unique()
+    settings['dataset']['labels'] = list(train_data_file[settings['dataset']['label_name_column']].unique())
+    settings['postprocessor']['labels'] = settings['dataset']['labels']
 
     # Create datasets for each fold
     training_datasets = [DataframeImageCategoricalDataset(settings['dataset'], train_data_file, training_transform)
@@ -94,13 +94,13 @@ def get_data_loaders():
     return training_data_loaders, validation_data_loaders, test_data_loaders
 
 
-def get_test_data_loaders():
+def get_test_data_loaders(settings):
 
     # Load test dataset files
     test_dfs = [pd.read_csv(dataset_file_path) for dataset_file_path in settings['test']['dataset_files']]
 
     # Get labels
-    settings['dataset']['labels'] = test_dfs[0][settings['dataset']['label_name_column']].unique()
+    settings['dataset']['labels'] = list(test_dfs[0][settings['dataset']['label_name_column']].unique())
     settings['postprocessor']['labels'] = settings['dataset']['labels']
 
     # Create dataset for each test data file

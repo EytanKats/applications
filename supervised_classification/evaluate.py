@@ -38,7 +38,7 @@ if __name__ == "__main__":
     settings['test'] = test_settings
 
     # Get data loaders for test
-    test_data_loaders = get_test_data_loaders()
+    test_data_loaders = get_test_data_loaders(settings)
 
     # Run test
     predict(

@@ -21,7 +21,7 @@ if __name__ == "__main__":
     )
 
     # Get data loaders for training, validation and test
-    training_data_loaders, validation_data_loaders, test_data_loaders = get_data_loaders()
+    training_data_loaders, validation_data_loaders, test_data_loaders = get_data_loaders(settings)
 
     # Run training
     fit(
